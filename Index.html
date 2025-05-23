@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Salesforce Dubai</title>
+    <style>
+        body, html {
+            margin: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .video-bg {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            min-width: 100%;
+            min-height: 100%;
+            z-index: -1;
+            object-fit: cover;
+        }
+
+        .content {
+            position: relative;
+            color: white;
+            text-align: center;
+            margin-top: 20%;
+        }
+
+        /* Login box */
+        .login-box {
+            background: rgba(109 210 228 / 60%);
+            border: 2px solid #007bff;
+            color: #fff;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            
+        }
+
+
+        .login-form {
+            padding: 40px 30px;
+            border-radius: 15px;
+            width: 350px;
+            margin-left: 576px;
+            margin-top: 145px;
+        }
+        #myModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6); /* semi-transparent background */
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+
+        .signup-form {
+            padding: 15px 30px;
+            border-radius: 15px;
+            width: 427px;
+            max-height: 80vh; /* Set max height */
+            overflow-y: auto;
+            margin-left: 90px;
+            margin-top: 0px;
+        }
+
+            /* Header */
+            .login-box h2 {
+                text-align: center;
+                margin-bottom: 25px;
+                font-size: 28px;
+            }
+
+        /* Input fields */
+        .input-group {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+            .input-group input {
+                width: 100%;
+                padding: 10px 10px 10px 0;
+                background: transparent;
+                border: none;
+                border-bottom: 2px solid #fff;
+                color: #fff;
+                outline: none;
+                font-size: 16px;
+            }
+
+            .input-group label {
+                position: absolute;
+                top: 10px;
+                left: 0;
+                color: #222121;
+                font-size: 16px;
+                pointer-events: none;
+                transition: 0.3s;
+            }
+
+            .input-group input:focus ~ label,
+            .input-group input:valid ~ label {
+                top: -10px;
+                font-size: 12px;
+                color: #fff;
+            }
+
+            .input-group .toggle-password,
+            .input-group .toggle-password2 {
+                position: absolute;
+                right: 10px;
+                top: 50%;
+                transform: translateY(-50%);
+                cursor: pointer;
+                font-size: 18px;
+                color: #555;
+            }
+
+                /* Options row */
+                .options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+            .options a {
+                color: #1f1e1e;
+                text-decoration: none;
+            }
+
+                .options a:hover {
+                    text-decoration: underline;
+                }
+
+        /* Button */
+        button {
+            width: 100%;
+            padding: 12px;
+            background: white;
+            color: black;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+            button:hover {
+                background: #ddd;
+            }
+
+        /* Register text */
+        .register-link {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+            .register-link a {
+                color: #3d1fb6;
+                font-weight: bold;
+                text-decoration: none;
+            }
+    </style>
+
+    <style>
+        #myModal {
+            display: none; /* hidden by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+            text-align: center;
+        }
+
+        .close-btn {
+            cursor: pointer;
+            color: red;
+            font-weight: bold;
+            float: right;
+            font-size: 25px;
+        }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+    </style>
+
+</head>
+<body>
+    <!--<video autoplay muted loop class="video-bg">
+        <source src="background.mp4" type="video/mp4">
+    </video>-->
+    <video id="videoPlayer" class="video-bg" autoplay muted></video>
+
+    <div id="myLogin">
+        <div class="login-box login-form">
+            <h2>Login</h2>
+            <form>
+                <div class="input-group">
+                    <input type="email" required />
+                    <label>Email</label>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="password" required />
+                    <label>Password</label>
+                    <span class="toggle-password" onclick="togglePassword()">👁️</span>
+                </div>
+                <div class="options">
+                    <label><input type="checkbox" /> Remember me</label>
+                    <a href="#">Forgot Password?</a>
+                </div>
+                <button type="submit">Login</button>
+                <p class="register-link">Don't have an agent? <a id="openModal" href="#">Register an Agent</a></p>
+            </form>
+        </div>
+    </div>
+
+
+    <!--Signup Page-->
+
+    <div id="myModal" style="display:none">
+        <div class="login-box signup-form">
+            <span class="close-btn" id="closeModal">&times;</span>
+            <h2>Sign Up Form</h2>
+
+            <form id="signupForm">
+                <div class="input-group">
+                    <input type="text" name="firstName" required />
+                    <label>First Name</label>
+                </div>
+
+                <div class="input-group">
+                    <input type="text" name="lastName" required />
+                    <label>Last Name</label>
+                </div>
+
+                <div class="input-group">
+                    <input type="email" name="email" required />
+                    <label>Email</label>
+                </div>
+
+                <div class="input-group">
+                    <input type="tel" name="phone" required />
+                    <label>Phone</label>
+                </div>
+
+                <div class="input-group">
+                    <input type="password" id="password2" name="password" required />
+                    <label>Password</label>
+                    <span class="toggle-password2" onclick="togglePassword2()">👁️</span>
+                </div>
+
+                <div class="input-group">
+                    <input type="text" name="tradeNumber" required />
+                    <label>Trade Number</label>
+                </div>
+
+                <div class="input-group">
+                    <input type="text" id="contractStartDate" name="contractStartDate" required />
+                    <label>Contract Start Date</label>
+                </div>
+
+                <div class="input-group">
+                    <input type="text" id="licenseExpiryDate" name="licenseExpiryDate" required />
+                    <label>License Expiry Date</label>
+                </div>
+
+                <div class="input-group" id="agencyTextGroup">
+                    <select id="agencyTypeText" name="agencyType">
+                        <option value="">Select Agency Type</option>
+                        <option value="Type A">Type A</option>
+                        <option value="Type B">Type B</option>
+                        <option value="Type C">Type C</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <button type="submit">Create Agent</button>
+            </form>
+
+        </div>
+    </div>
+
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        const videos = ['Salesforce.mp4', 'background.mp4']; // your video files
+        let current = 0;
+
+        const player = document.getElementById('videoPlayer');
+        player.src = videos[current];
+        player.play();
+
+        player.addEventListener('ended', function () {
+            current = (current + 1) % videos.length;
+            player.src = videos[current];
+            player.play();
+        });
+
+
+    </script>
+
+    <script>
+        const openModal = document.getElementById("openModal");
+        const modal = document.getElementById("myModal");
+        const closeModal = document.getElementById("closeModal");
+        const loginPage = document.getElementById("myLogin");
+
+        openModal.addEventListener("click", function (event) {
+            event.preventDefault(); // prevent default link behavior
+            modal.style.display = "flex"; // show modal
+            loginPage.style.display = "none"; // hide login page
+        });
+
+        closeModal.addEventListener("click", function () {
+            modal.style.display = "none"; // hide modal
+            loginPage.style.display = "flex"; //show modal
+        });
+
+        window.addEventListener("click", function (event) {
+            if (event.target === modal) {
+                modal.style.display = "none"; // hide modal if clicked outside
+                loginPage.style.display = "flex"; //show modal
+            }
+        });
+
+
+
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.querySelector('.toggle-password');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.textContent = '🙈'; // Change icon when visible
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.textContent = '👁️'; // Change back to eye icon
+            }
+        }
+
+        function togglePassword2() {
+            const passwordInput = document.getElementById('password2');
+            const toggleIcon = document.querySelector('.toggle-password2');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.textContent = '🙈'; // visible
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.textContent = '👁️'; // hidden
+            }
+        }
+
+        flatpickr("#contractStartDate", {
+            dateFormat: "d-m-y",
+            onChange: function (selectedDates, dateStr, instance) {
+                console.log("Selected contract start date:", dateStr);
+            }
+        });
+
+        flatpickr("#licenseExpiryDate", {
+            dateFormat: "d-m-y",
+            onChange: function (selectedDates, dateStr, instance) {
+                console.log("Selected license expiry date:", dateStr);
+            }
+        });
+
+        
+
+        //Create Signup Page
+        //$('#signupForm').on('submit', function (e) {
+        //    debugger;
+        //    e.preventDefault(); // Prevent default form submission
+
+        //    var formData = $(this).serialize(); // Serialize form fields
+
+        //    $.ajax({
+        //        url: '/api/agent/create',
+        //        type: 'POST',
+        //        data: formData,
+        //        success: function (response) {
+        //            alert(response.message);
+        //        },
+        //        error: function (xhr) {
+        //            alert('Error: ' + xhr.responseText);
+        //        }
+        //    });
+            
+        //});
+
+    </script>
+
+</body>
+</html>
+
+
+
